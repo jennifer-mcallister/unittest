@@ -4,6 +4,7 @@ import { Todo } from "../ts/models/Todo";
 
 // functions in functions.ts
 // dela upp addTodo mer, ett test per test typ
+// ändra så att det står todos istället för myTodos
 
 describe("addTodo", ()=> {
     test("should not create therefor not add new todo object if string is less then 3 characters", ()=> {
