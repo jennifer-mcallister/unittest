@@ -81,15 +81,41 @@ describe("displayError", ()=> {
         document.body.innerHTML = `
         <div id="error" class="error"></div>
         `;
-        let error = "errortext";
-        let show = true;
+        let error :string = "errortext";
+        let show :boolean= true;
 
         functions.displayError(error, show);
 
         expect(document.getElementById("error")?.innerHTML).toBe("errortext");
     })
 
-    test("should ")
+    test("should add class", ()=> {
+        document.body.innerHTML = `
+        <form id="newTodoForm">
+        <div id="error" class="error"></div>
+        </form>
+        `;
+        let error :string = "errortext";
+        let show :boolean = true;
+
+        functions.displayError(error, show);
+
+        expect(document.getElementById("newTodoForm")?.innerHTML).toMatch("show");
+    })
+
+    test("should remove class", ()=> {
+        document.body.innerHTML = `
+        <form id="newTodoForm">
+        <div id="error" class="error"></div>
+        </form>
+        `;
+        let error :string = "errortext";
+        let show: boolean = false;
+
+        functions.displayError(error, show);
+
+        expect(document.getElementById("newTodoForm")?.innerHTML).not.toMatch("show");
+    })
 })
 
 // lägg till att den anropar två funktion med en parameter
