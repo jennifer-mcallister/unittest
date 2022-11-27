@@ -1,10 +1,11 @@
-import { addTodo, changeTodo, removeAllTodos } from "./functions";
+// import { addTodo, changeTodo, removeAllTodos } from "./functions";
 import { Todo } from "./models/Todo";
+import { IAddResponse } from "./models/IAddResult";
 
 let todos: Todo[] = JSON.parse(localStorage.getItem("todos") || "[]");
 
 document.getElementById("clearTodos")?.addEventListener("click", () => {
-  clearTodos(todos);
+  exports.clearTodos(todos);
 });
 
 (document.getElementById("newTodoForm") as HTMLFormElement)?.addEventListener(
@@ -17,17 +18,17 @@ document.getElementById("clearTodos")?.addEventListener("click", () => {
     ).value;
     console.log("Todos when creating", todos);
 
-    createNewTodo(todoText, todos);
+    exports.createNewTodo(todoText, todos);
   }
 );
 
-function createNewTodo(todoText: string, todos: Todo[]) {
-  let result = addTodo(todoText, todos);
+export function createNewTodo(todoText: string, todos: Todo[]) {
+  let result = exports.addTodo(todoText, todos);
 
   if (result.success) {
-    createHtml(todos);
+    exports.createHtml(todos);
   } else {
-    displayError(result.error, true);
+    exports.displayError(result.error, true);
   }
 }
 
@@ -50,7 +51,7 @@ function createNewTodo(todoText: string, todos: Todo[]) {
     li.classList.add("todo__text");
     li.innerHTML = todos[i].text;
     li.addEventListener("click", () => {
-      toggleTodo(todos[i]);
+      exports.toggleTodo(todos[i]);
     });
 
     todosContainer.appendChild(li);
@@ -82,3 +83,24 @@ export function clearTodos(todos: Todo[]) {
 }
 
 // createHtml(todos);
+// För att några av mina tester i main.test.ts skulle fungera kopierade jag in funktioner från functions.ts filen. 
+// Testerna i main kunde inte hitta testerna i functions, så jag löste det med att kopiera in de här, 
+// så som de var från början när vi fick inlämningsuppgiften.
+
+export function addTodo(todoText: string, todos: Todo[]): IAddResponse {
+  if (todoText.length > 2) {
+    let newTodo = new Todo(todoText, false);
+    todos.push(newTodo);
+    return { success: true, error: "Du måste ange minst två bokstäver" };
+  } else {
+    return { success: false, error: "Du måste ange minst två bokstäver" };
+  }
+}
+
+export function changeTodo(todo: Todo) {
+  todo.done = !todo.done;
+}
+
+export function removeAllTodos(todos: Todo[]) {
+  todos.splice(0, todos.length);
+}
